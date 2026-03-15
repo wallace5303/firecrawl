@@ -20,11 +20,14 @@ FROM base AS build
 WORKDIR /app
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
-    curl \
-    build-essential \
-    pkg-config \
-    python3 \
+# 替换 Debian 官方源为阿里云源，解决 503 错误
+RUN sed -i "s/deb.debian.org/mirrors.aliyun.com/g" /etc/apt/sources.list.d/debian.sources \
+    && apt-get update -y \
+    && apt-get install -y \
+        curl \
+        build-essential \
+        pkg-config \
+        python3 \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Rust
